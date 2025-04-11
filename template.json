@@ -1,0 +1,261 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workflows_DNBE_Adobe_Pull_name": {
+            "defaultValue": "logic-dnbe-adobe-pull-dev",
+            "type": "String"
+        },
+        "workflows_DNBE_Adobe_Push_externalid": {
+            "defaultValue": "/subscriptions/668578fe-2ebc-4fe0-b587-807e9ce11d89/resourceGroups/rg-dnbe-dev/providers/Microsoft.Logic/workflows/logic-dnbe-adobe-push-dev",
+            "type": "String"
+        },
+        "connections_azureblob_externalid": {
+            "defaultValue": "/subscriptions/668578fe-2ebc-4fe0-b587-807e9ce11d89/resourceGroups/rg-dnbe-dev/providers/Microsoft.Web/connections/api-dnbe-blob-dev-01",
+            "type": "String"
+        },
+        "connections_office365_externalid": {
+            "defaultValue": "/subscriptions/668578fe-2ebc-4fe0-b587-807e9ce11d89/resourceGroups/rg-dnbe-dev/providers/Microsoft.Web/connections/api-dnbe-office365-dev",
+            "type": "String"
+        },
+        "connections_sftpwithssh_externalid": {
+            "defaultValue": "/subscriptions/668578fe-2ebc-4fe0-b587-807e9ce11d89/resourceGroups/rg-dnbe-dev/providers/Microsoft.Web/connections/api-dnbe-sftp-dev",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Logic/workflows",
+            "apiVersion": "2017-07-01",
+            "name": "[parameters('workflows_DNBE_Adobe_Pull_name')]",
+            "location": "westeurope",
+            "properties": {
+                "state": "Enabled",
+                "definition": {
+                    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {
+                        "$connections": {
+                            "defaultValue": {},
+                            "type": "Object"
+                        },
+                        "FunctionParseCsvUrl": {
+                            "defaultValue": "https://dnbfunctionsatest.azurewebsites.net/api/CsvToJson",
+                            "type": "String"
+                        }
+                    },
+                    "triggers": {
+                        "Recurrence": {
+                            "recurrence": {
+                                "frequency": "Day",
+                                "interval": 1,
+                                "schedule": {
+                                    "hours": [
+                                        "6"
+                                    ],
+                                    "minutes": [
+                                        0
+                                    ]
+                                }
+                            },
+                            "evaluatedRecurrence": {
+                                "frequency": "Day",
+                                "interval": 1,
+                                "schedule": {
+                                    "hours": [
+                                        "6"
+                                    ],
+                                    "minutes": [
+                                        0
+                                    ]
+                                }
+                            },
+                            "type": "Recurrence"
+                        }
+                    },
+                    "actions": {
+                        "Condition": {
+                            "actions": {
+                                "Create_blob": {
+                                    "runAfter": {},
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "body": "@body('Get_file_content')",
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                            }
+                                        },
+                                        "method": "post",
+                                        "path": "/datasets/default/files",
+                                        "queries": {
+                                            "folderPath": "/adobepullfiles",
+                                            "name": "I021_ACS_Next_consents_contactsConsent_@{utcNow()}.csv",
+                                            "queryParametersSingleEncoded": true
+                                        }
+                                    },
+                                    "runtimeConfiguration": {
+                                        "contentTransfer": {
+                                            "transferMode": "Chunked"
+                                        }
+                                    }
+                                },
+                                "DNB_Vitec_Consent_Push": {
+                                    "runAfter": {
+                                        "Parse_CSV_": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "Workflow",
+                                    "inputs": {
+                                        "body": "@body('Parse_CSV_')['rows']",
+                                        "host": {
+                                            "triggerName": "manual",
+                                            "workflow": {
+                                                "id": "[parameters('workflows_DNBE_Adobe_Push_externalid')]"
+                                            }
+                                        }
+                                    }
+                                },
+                                "Parse_CSV_": {
+                                    "runAfter": {
+                                        "Create_blob": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "Http",
+                                    "inputs": {
+                                        "body": "@body('Get_file_content')",
+                                        "method": "POST",
+                                        "queries": {
+                                            "fileName": "ConsentsUpdates",
+                                            "rowsToSkip": "1"
+                                        },
+                                        "uri": "@parameters('FunctionParseCsvUrl')"
+                                    }
+                                }
+                            },
+                            "runAfter": {
+                                "Delete_file": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "else": {
+                                "actions": {
+                                    "Send_an_email_(V2)": {
+                                        "runAfter": {},
+                                        "type": "ApiConnection",
+                                        "inputs": {
+                                            "body": {
+                                                "Body": "<p>There was an error importing the file contents - file seems to be empty.</p>",
+                                                "Subject": "DNB / Import failed",
+                                                "To": "hugo.becerra@isobar.com"
+                                            },
+                                            "host": {
+                                                "connection": {
+                                                    "name": "@parameters('$connections')['office365_1']['connectionId']"
+                                                }
+                                            },
+                                            "method": "post",
+                                            "path": "/v2/Mail"
+                                        }
+                                    }
+                                }
+                            },
+                            "expression": {
+                                "and": [
+                                    {
+                                        "not": {
+                                            "equals": [
+                                                "@length(body('Get_file_content'))",
+                                                0
+                                            ]
+                                        }
+                                    }
+                                ]
+                            },
+                            "type": "If"
+                        },
+                        "Delete_file": {
+                            "runAfter": {
+                                "Get_file_content": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "metadata": {
+                                "L2luY29taW5nL0FDU19GaWxlcy9JMDIxX0FDU19OZXh0X2NvbnNlbnRzX2NvbnRhY3RzQ29uc2VudC5jc3Y=": "/incoming/ACS_Files/I021_ACS_Next_consents_contactsConsent.csv"
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "headers": {
+                                    "SkipDeleteIfFileNotFoundOnServer": true
+                                },
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['sftpwithssh']['connectionId']"
+                                    }
+                                },
+                                "method": "delete",
+                                "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent('L2luY29taW5nL0FDU19GaWxlcy9JMDIxX0FDU19OZXh0X2NvbnNlbnRzX2NvbnRhY3RzQ29uc2VudC5jc3Y='))}"
+                            }
+                        },
+                        "File_no_existent_in_ACS": {
+                            "runAfter": {
+                                "Get_file_content": [
+                                    "Failed"
+                                ]
+                            },
+                            "type": "Terminate",
+                            "inputs": {
+                                "runStatus": "Succeeded"
+                            }
+                        },
+                        "Get_file_content": {
+                            "runAfter": {},
+                            "metadata": {
+                                "L2luY29taW5nL0FDU19GaWxlcy9JMDIxX0FDU19OZXh0X2NvbnNlbnRzX2NvbnRhY3RzQ29uc2VudC5jc3Y=": "/incoming/ACS_Files/I021_ACS_Next_consents_contactsConsent.csv",
+                                "L2luY29taW5nL21vbGxlcl9jc3Zfc2FtcGxlLmNzdg==": "/incoming/moller_csv_sample.csv"
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['sftpwithssh']['connectionId']"
+                                    }
+                                },
+                                "method": "get",
+                                "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent('L2luY29taW5nL0FDU19GaWxlcy9JMDIxX0FDU19OZXh0X2NvbnNlbnRzX2NvbnRhY3RzQ29uc2VudC5jc3Y='))}/content",
+                                "queries": {
+                                    "inferContentType": true
+                                }
+                            }
+                        }
+                    },
+                    "outputs": {}
+                },
+                "parameters": {
+                    "$connections": {
+                        "value": {
+                            "azureblob": {
+                                "connectionId": "[parameters('connections_azureblob_externalid')]",
+                                "connectionName": "azureblob",
+                                "id": "/subscriptions/668578fe-2ebc-4fe0-b587-807e9ce11d89/providers/Microsoft.Web/locations/westeurope/managedApis/azureblob"
+                            },
+                            "office365_1": {
+                                "connectionId": "[parameters('connections_office365_externalid')]",
+                                "connectionName": "office365",
+                                "id": "/subscriptions/668578fe-2ebc-4fe0-b587-807e9ce11d89/providers/Microsoft.Web/locations/westeurope/managedApis/office365"
+                            },
+                            "sftpwithssh": {
+                                "connectionId": "[parameters('connections_sftpwithssh_externalid')]",
+                                "connectionName": "sftpwithssh",
+                                "id": "/subscriptions/668578fe-2ebc-4fe0-b587-807e9ce11d89/providers/Microsoft.Web/locations/westeurope/managedApis/api-dnbe-sftp-dev"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}
