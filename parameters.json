@@ -1,0 +1,81 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workflows_DNBE_Adobe_Pull_Production_name": {
+            "value": null
+        },
+        "workflows_DNBE_Adobe_Push_Production_name": {
+            "value": null
+        },
+        "workflows_DNBE_CreateVitecUrl_Production_name": {
+            "value": null
+        },
+        "workflows_DNBE_ACS_SendHistory_Production_name": {
+            "value": null
+        },
+        "workflows_DNBE_Vitec_Consent_Push_Production_name": {
+            "value": null
+        },
+        "workflows_DNBE_Vitec_Delta_Load_Pull_Production_name": {
+            "value": null
+        },
+        "workflows_DNBE_Adobe_Push_Failed_Jobs_Production_name": {
+            "value": null
+        },
+        "workflows_DNBE_CreateContactActivities_Production_name": {
+            "value": null
+        },
+        "workflows_DNBE_CreateOrdersUpdatesFile_Production_name": {
+            "value": null
+        },
+        "workflows_DNBE_CreateRemoveObjectsFile_Production_name": {
+            "value": null
+        },
+        "workflows_DNBE_CreateContactUpdateFiles_Production_name": {
+            "value": null
+        },
+        "workflows_DNBE_CreateEstatesUpdatesFile_Production_name": {
+            "value": null
+        },
+        "workflows_DNBE_CreateEmployeesUpdatesFile_Production_name": {
+            "value": null
+        },
+        "workflows_DNBE_Vitec_ContactRelations_Push_Production_name": {
+            "value": null
+        },
+        "workflows_DNBE_Adobe_ContactRelations_PushCSV_Production_name": {
+            "value": null
+        },
+        "workflows_DNBE_CreateSearchProfileUpdatesFile_Production_name": {
+            "value": null
+        },
+        "workflows_DNBE_Vitec_Delta_Load_Pull_Checklist_Production_name": {
+            "value": null
+        },
+        "workflows_DNBE_CreateContactsConsentUpdatesFile_Production_name": {
+            "value": null
+        },
+        "workflows_DNBE_CreateEstateContactsUpdatesFiles_Production_name": {
+            "value": null
+        },
+        "workflows_DNBE_CreateEstatesChecklistUpdatesFile_Production_name": {
+            "value": null
+        },
+        "sites_dnbefunctionsproductionnew_externalid": {
+            "value": null
+        },
+        "connections_sftpwithsshproductionconnection_externalid": {
+            "value": null
+        },
+        "connections_azureblobproductionconnection_externalid": {
+            "value": null
+        },
+        "connections_office365_externalid": {
+            "value": null
+        },
+        "connections_documentdbproductionconnection_externalid": {
+            "value": null
+        }
+    }
+}
