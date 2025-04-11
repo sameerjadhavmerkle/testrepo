@@ -1,0 +1,450 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workflows_DNBE_Adobe_Pull_Production_name": {
+            "defaultValue": "DNBE_Adobe_Pull_Production",
+            "type": "String"
+        },
+        "workflows_DNBE_Adobe_Push_Production_name": {
+            "defaultValue": "DNBE_Adobe_Push_Production",
+            "type": "String"
+        },
+        "workflows_DNBE_CreateVitecUrl_Production_name": {
+            "defaultValue": "DNBE_CreateVitecUrl_Production",
+            "type": "String"
+        },
+        "workflows_DNBE_ACS_SendHistory_Production_name": {
+            "defaultValue": "DNBE_ACS_SendHistory_Production",
+            "type": "String"
+        },
+        "workflows_DNBE_Vitec_Consent_Push_Production_name": {
+            "defaultValue": "DNBE_Vitec_Consent_Push_Production",
+            "type": "String"
+        },
+        "workflows_DNBE_Vitec_Delta_Load_Pull_Production_name": {
+            "defaultValue": "DNBE_Vitec_Delta_Load_Pull_Production",
+            "type": "String"
+        },
+        "workflows_DNBE_Adobe_Push_Failed_Jobs_Production_name": {
+            "defaultValue": "DNBE_Adobe_Push_Failed_Jobs_Production",
+            "type": "String"
+        },
+        "workflows_DNBE_CreateContactActivities_Production_name": {
+            "defaultValue": "DNBE_CreateContactActivities_Production",
+            "type": "String"
+        },
+        "workflows_DNBE_CreateOrdersUpdatesFile_Production_name": {
+            "defaultValue": "DNBE_CreateOrdersUpdatesFile_Production",
+            "type": "String"
+        },
+        "workflows_DNBE_CreateRemoveObjectsFile_Production_name": {
+            "defaultValue": "DNBE_CreateRemoveObjectsFile_Production",
+            "type": "String"
+        },
+        "workflows_DNBE_CreateContactUpdateFiles_Production_name": {
+            "defaultValue": "DNBE_CreateContactUpdateFiles_Production",
+            "type": "String"
+        },
+        "workflows_DNBE_CreateEstatesUpdatesFile_Production_name": {
+            "defaultValue": "DNBE_CreateEstatesUpdatesFile_Production",
+            "type": "String"
+        },
+        "workflows_DNBE_CreateEmployeesUpdatesFile_Production_name": {
+            "defaultValue": "DNBE_CreateEmployeesUpdatesFile_Production",
+            "type": "String"
+        },
+        "workflows_DNBE_Vitec_ContactRelations_Push_Production_name": {
+            "defaultValue": "DNBE_Vitec_ContactRelations_Push_Production",
+            "type": "String"
+        },
+        "workflows_DNBE_Adobe_ContactRelations_PushCSV_Production_name": {
+            "defaultValue": "DNBE_Adobe_ContactRelations_PushCSV_Production",
+            "type": "String"
+        },
+        "workflows_DNBE_CreateSearchProfileUpdatesFile_Production_name": {
+            "defaultValue": "DNBE_CreateSearchProfileUpdatesFile_Production",
+            "type": "String"
+        },
+        "workflows_DNBE_Vitec_Delta_Load_Pull_Checklist_Production_name": {
+            "defaultValue": "DNBE_Vitec_Delta_Load_Pull_Checklist_Production",
+            "type": "String"
+        },
+        "workflows_DNBE_CreateContactsConsentUpdatesFile_Production_name": {
+            "defaultValue": "DNBE_CreateContactsConsentUpdatesFile_Production",
+            "type": "String"
+        },
+        "workflows_DNBE_CreateEstateContactsUpdatesFiles_Production_name": {
+            "defaultValue": "DNBE_CreateEstateContactsUpdatesFiles_Production",
+            "type": "String"
+        },
+        "workflows_DNBE_CreateEstatesChecklistUpdatesFile_Production_name": {
+            "defaultValue": "DNBE_CreateEstatesChecklistUpdatesFile_Production",
+            "type": "String"
+        },
+        "sites_dnbefunctionsproductionnew_externalid": {
+            "defaultValue": "/subscriptions/e919eda8-8a91-4ccf-8848-0c2f02a2fcb1/resourceGroups/rg-dnb-dev/providers/Microsoft.Web/sites/dnbefunctionsproductionnew",
+            "type": "String"
+        },
+        "connections_sftpwithsshproductionconnection_externalid": {
+            "defaultValue": "/subscriptions/e919eda8-8a91-4ccf-8848-0c2f02a2fcb1/resourceGroups/rg-dnb-dev/providers/Microsoft.Web/connections/sftpwithsshproductionconnection",
+            "type": "String"
+        },
+        "connections_azureblobproductionconnection_externalid": {
+            "defaultValue": "/subscriptions/e919eda8-8a91-4ccf-8848-0c2f02a2fcb1/resourceGroups/rg-dnb-dev/providers/Microsoft.Web/connections/azureblobproductionconnection",
+            "type": "String"
+        },
+        "connections_office365_externalid": {
+            "defaultValue": "/subscriptions/e919eda8-8a91-4ccf-8848-0c2f02a2fcb1/resourceGroups/rg-dnb-dev/providers/Microsoft.Web/connections/office365",
+            "type": "String"
+        },
+        "connections_documentdbproductionconnection_externalid": {
+            "defaultValue": "/subscriptions/e919eda8-8a91-4ccf-8848-0c2f02a2fcb1/resourceGroups/rg-dnb-dev/providers/Microsoft.Web/connections/documentdbproductionconnection",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Logic/workflows",
+            "apiVersion": "2017-07-01",
+            "name": "[parameters('workflows_DNBE_ACS_SendHistory_Production_name')]",
+            "location": "northeurope",
+            "tags": {
+                "environment": "Production"
+            },
+            "properties": {
+                "state": "Enabled",
+                "definition": {
+                    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {
+                        "$connections": {
+                            "defaultValue": {},
+                            "type": "Object"
+                        },
+                        "InstallationId": {
+                            "defaultValue": "MSDNB",
+                            "type": "String"
+                        },
+                        "Password": {
+                            "defaultValue": "We7X7nk2ekbGmpp",
+                            "type": "SecureString"
+                        },
+                        "Username": {
+                            "defaultValue": "dnbevitecnet",
+                            "type": "SecureString"
+                        },
+                        "Vitec Base URL": {
+                            "defaultValue": "https://hub.megler.vitec.net/",
+                            "type": "String"
+                        }
+                    },
+                    "triggers": {
+                        "Recurrence": {
+                            "recurrence": {
+                                "frequency": "Hour",
+                                "interval": 6,
+                                "startTime": "2021-05-06T06:00:00Z",
+                                "timeZone": "Romance Standard Time"
+                            },
+                            "evaluatedRecurrence": {
+                                "frequency": "Hour",
+                                "interval": 6,
+                                "startTime": "2021-05-06T06:00:00Z",
+                                "timeZone": "Romance Standard Time"
+                            },
+                            "type": "Recurrence"
+                        }
+                    },
+                    "actions": {
+                        "For_each_file": {
+                            "foreach": "@body('List_files_in_SFTP_folder')",
+                            "actions": {
+                                "Condition": {
+                                    "actions": {
+                                        "Append_to_array_variable": {
+                                            "runAfter": {},
+                                            "type": "AppendToArrayVariable",
+                                            "inputs": {
+                                                "name": "FilesPath",
+                                                "value": "@items('For_each_file')?['Path']"
+                                            }
+                                        }
+                                    },
+                                    "runAfter": {},
+                                    "expression": {
+                                        "and": [
+                                            {
+                                                "startsWith": [
+                                                    "@items('For_each_file')?['Name']",
+                                                    "@string('I023_ACS_Next_activityLog_Activities')"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "type": "If"
+                                }
+                            },
+                            "runAfter": {
+                                "List_files_in_SFTP_folder": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Foreach",
+                            "runtimeConfiguration": {
+                                "concurrency": {
+                                    "repetitions": 1
+                                }
+                            }
+                        },
+                        "For_each_path": {
+                            "foreach": "@variables('FilesPath')",
+                            "actions": {
+                                "Copy_file": {
+                                    "runAfter": {
+                                        "For_each_row": [
+                                            "Succeeded",
+                                            "TimedOut",
+                                            "Skipped",
+                                            "Failed"
+                                        ]
+                                    },
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "headers": {
+                                            "ReadFileMetadataFromServer": true
+                                        },
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['sftpwithssh']['connectionId']"
+                                            }
+                                        },
+                                        "method": "post",
+                                        "path": "/datasets/default/copyFile",
+                                        "queries": {
+                                            "destination": "/incoming/Azure_Archive",
+                                            "overwrite": true,
+                                            "queryParametersSingleEncoded": true,
+                                            "source": "@{items('For_each_path')}"
+                                        }
+                                    }
+                                },
+                                "CsvWithBreakLinesToJson": {
+                                    "runAfter": {
+                                        "Get_file_content_": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "Function",
+                                    "inputs": {
+                                        "body": "@body('Get_file_content_')",
+                                        "function": {
+                                            "id": "[concat(parameters('sites_dnbefunctionsproductionnew_externalid'), '/functions/CsvWithBreakLinesToJson')]"
+                                        },
+                                        "queries": {
+                                            "fileName": "SendHistory",
+                                            "rowsToSkip": 1
+                                        }
+                                    }
+                                },
+                                "Delete_file": {
+                                    "runAfter": {
+                                        "Copy_file": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "headers": {
+                                            "SkipDeleteIfFileNotFoundOnServer": true
+                                        },
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['sftpwithssh']['connectionId']"
+                                            }
+                                        },
+                                        "method": "delete",
+                                        "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each_path')))}"
+                                    }
+                                },
+                                "For_each_row": {
+                                    "foreach": "@body('Parse_JSON_')?['rows']",
+                                    "actions": {
+                                        "Post_to_Vitec": {
+                                            "runAfter": {},
+                                            "type": "Http",
+                                            "inputs": {
+                                                "authentication": {
+                                                    "password": "@parameters('Password')",
+                                                    "type": "Basic",
+                                                    "username": "@parameters('Username')"
+                                                },
+                                                "body": {
+                                                    "contactIds": [
+                                                        "@items('For_each_row')?['Contact ID']"
+                                                    ],
+                                                    "doneDate": "@items('For_each_row')?['Event Date']",
+                                                    "employeeId": "@items('For_each_row')?['Employee ID']",
+                                                    "end": "@items('For_each_row')?['Event Date']",
+                                                    "estateId": "@items('For_each_row')?['Estate ID']",
+                                                    "note": "@items('For_each_row')?['Delivery Description']",
+                                                    "start": "@items('For_each_row')?['Event Date']",
+                                                    "title": "@items('For_each_row')?['Delivery Label']",
+                                                    "type": "@if(equals(items('For_each_row')?['Delivery Type'], 'email'), 33, 7)"
+                                                },
+                                                "method": "POST",
+                                                "uri": "@{parameters('Vitec Base URL')}/@{parameters('InstallationId')}/Activities"
+                                            }
+                                        }
+                                    },
+                                    "runAfter": {
+                                        "Parse_JSON_": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "Foreach",
+                                    "runtimeConfiguration": {
+                                        "concurrency": {
+                                            "repetitions": 1
+                                        }
+                                    }
+                                },
+                                "Get_file_content_": {
+                                    "runAfter": {},
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['sftpwithssh']['connectionId']"
+                                            }
+                                        },
+                                        "method": "get",
+                                        "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each_path')))}/content",
+                                        "queries": {
+                                            "inferContentType": true
+                                        }
+                                    }
+                                },
+                                "Parse_JSON_": {
+                                    "runAfter": {
+                                        "CsvWithBreakLinesToJson": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "ParseJson",
+                                    "inputs": {
+                                        "content": "@body('CsvWithBreakLinesToJson')",
+                                        "schema": {
+                                            "properties": {
+                                                "fileName": {
+                                                    "type": "string"
+                                                },
+                                                "rows": {
+                                                    "items": {
+                                                        "properties": {
+                                                            "Contact ID": {
+                                                                "type": "string"
+                                                            },
+                                                            "Delivery Description": {
+                                                                "type": "string"
+                                                            },
+                                                            "Delivery Label": {
+                                                                "type": "string"
+                                                            },
+                                                            "Delivery Type": {
+                                                                "type": "string"
+                                                            },
+                                                            "Employee ID": {
+                                                                "type": "string"
+                                                            },
+                                                            "Estate ID": {
+                                                                "type": "string"
+                                                            },
+                                                            "Event Date": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "Contact ID",
+                                                            "Estate ID",
+                                                            "Employee ID",
+                                                            "Delivery Label",
+                                                            "Delivery Description",
+                                                            "Delivery Type",
+                                                            "Event Date"
+                                                        ],
+                                                        "type": "object"
+                                                    },
+                                                    "type": "array"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            },
+                            "runAfter": {
+                                "For_each_file": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Foreach",
+                            "runtimeConfiguration": {
+                                "concurrency": {
+                                    "repetitions": 1
+                                }
+                            }
+                        },
+                        "Initialize_variable": {
+                            "runAfter": {},
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "FilesPath",
+                                        "type": "array"
+                                    }
+                                ]
+                            }
+                        },
+                        "List_files_in_SFTP_folder": {
+                            "runAfter": {
+                                "Initialize_variable": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "metadata": {
+                                "L2luY29taW5nL0FDU19GaWxlcw==": "/incoming/ACS_Files"
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['sftpwithssh']['connectionId']"
+                                    }
+                                },
+                                "method": "get",
+                                "path": "/datasets/default/folders/@{encodeURIComponent(encodeURIComponent('L2luY29taW5nL0FDU19GaWxlcw=='))}"
+                            }
+                        }
+                    },
+                    "outputs": {}
+                },
+                "parameters": {
+                    "$connections": {
+                        "value": {
+                            "sftpwithssh": {
+                                "connectionId": "[parameters('connections_sftpwithsshproductionconnection_externalid')]",
+                                "connectionName": "sftpwithsshproductionconnection",
+                                "id": "/subscriptions/e919eda8-8a91-4ccf-8848-0c2f02a2fcb1/providers/Microsoft.Web/locations/northeurope/managedApis/sftpwithssh"
+                            }
+                        }
+                    },
+                    "Password": {},
+                    "Username": {}
+                }
+            }
+        },
+    ]
+}
